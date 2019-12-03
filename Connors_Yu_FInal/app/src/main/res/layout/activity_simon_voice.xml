@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_simon_game"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#000000"
+    tools:context=".simon_voice">
+
+
+    <Button
+        android:id="@+id/sbut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="71dp"
+        android:onClick="tap"
+        android:text="Tap to Answer" />
+
+    <TextView
+        android:text="Score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/scoreString" />
+
+    <Button
+        android:text="Quit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="21dp"
+        android:id="@+id/Quitbutton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="quitButton"/>
+
+    <ImageView
+        android:id="@+id/redButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/greenButton"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/greenButton"
+        android:layout_toRightOf="@+id/greenButton"
+        android:scaleType="matrix"
+        app:srcCompat="@drawable/red_unlit" />
+
+    <ImageView
+        android:id="@+id/yellowButton"
+        android:layout_width="192dp"
+        android:layout_height="227dp"
+        android:layout_below="@+id/greenButton"
+        android:layout_alignStart="@+id/greenButton"
+        android:layout_alignLeft="@+id/greenButton"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="21dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="0dp"
+        android:scaleType="matrix"
+        app:srcCompat="@drawable/yellow_unlit" />
+
+    <ImageView
+        android:id="@+id/greenButton"
+        android:layout_width="197dp"
+        android:layout_height="215dp"
+        android:layout_below="@+id/scoreString"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginTop="24dp"
+        android:adjustViewBounds="false"
+        android:foregroundGravity="top"
+        android:scaleType="matrix"
+        app:srcCompat="@drawable/green_unlit" />
+
+    <ImageView
+        android:id="@+id/blueButton"
+        android:layout_width="141dp"
+        android:layout_height="297dp"
+        android:layout_alignStart="@+id/redButton"
+        android:layout_alignLeft="@+id/redButton"
+        android:layout_alignTop="@+id/yellowButton"
+        android:layout_marginStart="-4dp"
+        android:layout_marginLeft="-4dp"
+        android:layout_marginTop="36dp"
+        android:scaleType="matrix"
+        app:srcCompat="@drawable/blue_unlit" />
+
+</RelativeLayout>

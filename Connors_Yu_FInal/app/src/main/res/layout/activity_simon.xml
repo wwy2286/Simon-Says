@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_simon_game"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+
+    tools:context=".simon_motion">
+
+    <TextView
+        android:text="h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/scoreString" />
+
+    <Button
+        android:id="@+id/Quitbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="9dp"
+        android:onClick="quitButton"
+        android:text="f" />
+
+    <ImageView
+        android:id="@+id/redButton"
+        android:layout_width="170dp"
+        android:layout_height="212dp"
+        android:layout_alignTop="@+id/greenButton"
+        android:layout_marginStart="-1dp"
+        android:layout_marginLeft="-1dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/greenButton"
+        android:layout_toRightOf="@+id/greenButton"
+        android:scaleType="matrix"
+        app:srcCompat="@drawable/red_unlit" />
+
+    <ImageView
+        android:id="@+id/yellowButton"
+        android:layout_width="194dp"
+        android:layout_height="289dp"
+        android:layout_below="@+id/greenButton"
+        android:layout_alignStart="@+id/greenButton"
+        android:layout_alignLeft="@+id/greenButton"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="-15dp"
+        android:layout_marginTop="21dp"
+        android:scaleType="matrix"
+        app:srcCompat="@drawable/yellow_unlit" />
+
+    <ImageView
+        android:id="@+id/greenButton"
+        android:layout_width="181dp"
+        android:layout_height="214dp"
+        android:layout_below="@+id/scoreString"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="-1dp"
+        android:layout_marginLeft="-1dp"
+        android:layout_marginTop="14dp"
+        android:adjustViewBounds="false"
+        android:foregroundGravity="top"
+        android:scaleType="matrix"
+        app:srcCompat="@drawable/green_unlit" />
+
+    <ImageView
+        android:id="@+id/blueButton"
+        android:layout_width="211dp"
+        android:layout_height="230dp"
+        android:layout_alignStart="@+id/redButton"
+        android:layout_alignLeft="@+id/redButton"
+        android:layout_alignTop="@+id/yellowButton"
+        android:layout_marginTop="-6dp"
+        android:scaleType="matrix"
+        app:srcCompat="@drawable/blue_unlit" />
+
+    <Button
+        android:id="@+id/sbut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="71dp"
+        android:onClick="tap"
+        android:text="Tap to Answer" />
+
+</RelativeLayout>
