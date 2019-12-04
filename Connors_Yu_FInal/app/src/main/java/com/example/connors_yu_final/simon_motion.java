@@ -36,6 +36,7 @@ public class simon_motion extends AppCompatActivity {
     private static final int PLAYER_GUESS = 3;
     private static final int DEAD_STATE = 4;
     private static int CURRENT_STATE = 0;
+    private static final int DARK_SEQ = 5;
 
     private static Bitmap GreenUnlit, GreenLit;
     private static Bitmap RedUnlit, RedLit;
@@ -78,55 +79,95 @@ public class simon_motion extends AppCompatActivity {
         colorToInt.put("BLUE",4);
 
         Score = (TextView)findViewById(R.id.scoreString);
+        //gyroscope.unregister();
+        //setGyroscopeListener();
         setBitMaps();
-        initGame();
+        //setAccelerometerListener();
 
 
 
-//        accelerometer.setListener(new Accelerometer.Listener() {
-//            @Override
-//            public void onTranslation(float tx, float ty, float tz) {
-////                System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
-////                Toast.makeText(context, "x = " + tx + " y = " + ty + " z = " + tz , Toast.LENGTH_LONG);
-////                if(tx>1.0f && ty>1.0f){
-////                    getWindow().getDecorView().setBackgroundColor(Color.RED);
-////                }
-////                else if(tx>1.0f && ty<-1.0f){
-////                    getWindow().getDecorView().setBackgroundColor(Color.BLUE);
-////                }
-////                else if(tx<-1.0f && ty>1.0f){
-////                    getWindow().getDecorView().setBackgroundColor(Color.GREEN);
-////                } else if(tx<-1.0f && ty<-1.0f){
-////                    getWindow().getDecorView().setBackgroundColor(Color.YELLOW);
-////                }
+
+
 //
-//            }
-//        });
 
+
+        //gyroscope.unregister();
+
+    initGame();
+    //gyroscope.unregister();
+
+    }
+
+    public void setAccelerometerListener(){
+        accelerometer.setListener(new Accelerometer.Listener() {
+            @Override
+            public void onTranslation(float tx, float ty, float tz) {
+
+                Toast.makeText(context, "x = " + tx + " y = " + ty + " z = " + tz , Toast.LENGTH_LONG);
+                if(tx>1.0f && ty>1.0f){
+                    getWindow().getDecorView().setBackgroundColor(Color.RED);
+                    System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
+                    bb.add(2);
+
+                    accelerometer.unregister();
+                }
+                else if(tx>1.0f && ty<-1.0f){
+                    getWindow().getDecorView().setBackgroundColor(Color.BLUE);
+                    System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
+                    bb.add(4);
+                    accelerometer.unregister();
+                }
+                else if(tx<-1.0f && ty>1.0f){
+                    getWindow().getDecorView().setBackgroundColor(Color.GREEN);
+                    System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
+                    bb.add(1);
+
+                    accelerometer.unregister();
+                } else if(tx<-1.0f && ty<-1.0f){
+                    getWindow().getDecorView().setBackgroundColor(Color.YELLOW);
+                    System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
+                    bb.add(3);
+                    accelerometer.unregister();
+                }
+
+            }
+        });
+
+    }
+
+    public void setGyroscopeListener(){
         gyroscope.setListener(new Gyroscope.Listener() {
             @Override
             public void onTranslation(float tx, float ty, float tz) {
 //                System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
 //                Toast.makeText(context, "x = " + tx + " y = " + ty + " z = " + tz , Toast.LENGTH_LONG);
-                if(tx>1.0f && ty>1.0f && CURRENT_STATE == PLAYER_GUESS){
+                if(tx>2.0f && ty>2.0f && CURRENT_STATE == PLAYER_GUESS){
                     getWindow().getDecorView().setBackgroundColor(Color.RED);
                     bb.add(2);
+                    System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
+                    gyroscope.unregister();
                 }
-                else if(tx>1.0f && ty<-1.0f && CURRENT_STATE == PLAYER_GUESS){
+                else if(tx>2.0f && ty<-2.0f && CURRENT_STATE == PLAYER_GUESS){
                     getWindow().getDecorView().setBackgroundColor(Color.BLUE);
                     bb.add(4);
+                    System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
+                    gyroscope.unregister();
                 }
-                else if(tx<-1.0f && ty>1.0f && CURRENT_STATE == PLAYER_GUESS){
+                else if(tx<-2.0f && ty>2.0f && CURRENT_STATE == PLAYER_GUESS){
                     getWindow().getDecorView().setBackgroundColor(Color.GREEN);
                     bb.add(1);
-                } else if(tx<-1.0f && ty<-1.0f && CURRENT_STATE == PLAYER_GUESS){
+                    System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
+                    gyroscope.unregister();
+                } else if(tx<-2.0f && ty<-2.0f && CURRENT_STATE == PLAYER_GUESS){
                     getWindow().getDecorView().setBackgroundColor(Color.YELLOW);
                     bb.add(3);
+                    System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
+                    gyroscope.unregister();
                 }
+
             }
         });
         //gyroscope.unregister();
-
     }
 
 
@@ -156,6 +197,7 @@ public class simon_motion extends AppCompatActivity {
 
     private void update()
     {
+        getWindow().getDecorView().setBackgroundColor(Color.BLACK);
         //Generate Sequence State
         if (CURRENT_STATE == GENERATE_SEQ) {
             clearPlayerSequence();
@@ -168,8 +210,12 @@ public class simon_motion extends AppCompatActivity {
         //Play Sequence State
         if (CURRENT_STATE == PLAY_SEQ) {
             playSequence();
+            CURRENT_STATE = DARK_SEQ;
             if (playSeqCounter == gameSequence.size())
                 CURRENT_STATE = PLAYER_GUESS;
+        } else if (CURRENT_STATE == DARK_SEQ){
+            darkSequence();
+            CURRENT_STATE = PLAY_SEQ;
         }
 
         //Player repeats/guesses state
@@ -199,7 +245,7 @@ public class simon_motion extends AppCompatActivity {
         }
         //What this does is, if you're in the player guess state, remove the time delay, so the user can enter the sequence as fast as he/she desires
         if (CURRENT_STATE == PLAYER_GUESS)
-            SimonButtonHandler.sleep(0);
+            SimonButtonHandler.sleep(mMoveDelay);
             //otherwise, use the normal delay
         else
             SimonButtonHandler.sleep(mMoveDelay);
@@ -208,9 +254,12 @@ public class simon_motion extends AppCompatActivity {
 
 
     public void tap(View view)
-
     {
 
+//        setGyroscopeListener();
+//        gyroscope.register();
+            setAccelerometerListener();
+            accelerometer.register();
 
     }
 
@@ -276,9 +325,9 @@ public class simon_motion extends AppCompatActivity {
         long time = System.currentTimeMillis();
 
         if (time - mLastMove > mMoveDelay) {
-            if (playSeqCounter != 0) {
-                darkenButton(playSeqCounter - 1);
-            }
+//            if (playSeqCounter != 0) {
+//                darkenButton(playSeqCounter - 1);
+//            }
             if (playSeqCounter < gameSequence.size()) {
                 lightButton(playSeqCounter);
                 System.out.println(playSeqCounter);
@@ -286,6 +335,17 @@ public class simon_motion extends AppCompatActivity {
             }
             mLastMove = time;
         }
+    }
+
+    private void darkSequence(){
+        long time = System.currentTimeMillis();
+
+        if (time - mLastMove > mMoveDelay) {
+            if(playSeqCounter != 0){
+                darkenButton(playSeqCounter -1);
+            }
+        }
+        mLastMove = time;
     }
 
     //All this function does is darken the last button in the sequence.

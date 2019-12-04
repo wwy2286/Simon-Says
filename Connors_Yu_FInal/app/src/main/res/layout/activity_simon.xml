@@ -84,7 +84,7 @@
         app:srcCompat="@drawable/blue_unlit" />
 
     <Button
-        android:id="@+id/sbut"
+        android:id="@+id/motionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
