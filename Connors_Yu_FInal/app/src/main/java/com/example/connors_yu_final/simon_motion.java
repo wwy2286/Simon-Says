@@ -42,6 +42,8 @@ public class simon_motion extends AppCompatActivity {
     private static Bitmap RedUnlit, RedLit;
     private static Bitmap BlueUnlit, BlueLit;
     private static Bitmap YellowUnlit, YellowLit;
+    private ImageView gameover;
+    Button inputButton, restartButton;
 
     private static TextView Score;
 
@@ -77,8 +79,10 @@ public class simon_motion extends AppCompatActivity {
         colorToInt.put("GREEN",1);
         colorToInt.put("YELLOW",3);
         colorToInt.put("BLUE",4);
-
+        inputButton = findViewById(R.id.motionButton);
+        gameover = findViewById(R.id.gameover);
         Score = (TextView)findViewById(R.id.scoreString);
+        restartButton = findViewById(R.id.restartButton);
         //gyroscope.unregister();
         //setGyroscopeListener();
         setBitMaps();
@@ -93,7 +97,7 @@ public class simon_motion extends AppCompatActivity {
 
         //gyroscope.unregister();
 
-    initGame();
+    //initGame();
     //gyroscope.unregister();
 
     }
@@ -183,8 +187,11 @@ public class simon_motion extends AppCompatActivity {
         }
     }
 
-    private void initGame()
+    public void initGame(View v)
     {
+        gameover.setVisibility(View.INVISIBLE);
+        inputButton.setVisibility(View.VISIBLE);
+        restartButton.setVisibility(View.INVISIBLE);
         gameSequence = new ArrayList<Integer>();
         bb = new ArrayList<Integer>();
         mMoveDelay = 750;
@@ -297,19 +304,19 @@ public class simon_motion extends AppCompatActivity {
     //if you click the quit button, goes to quit screen
     public void quitButton(View view)
     {
-        Intent intent = new Intent(this, GameOver.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("scoreCounter",scoreCounter);
-        startActivity(intent);
+        finish();
     }
 
     //Game over state
     private void gameOver()
     {
-        Intent intent = new Intent(this, GameOver.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("scoreCounter",scoreCounter);
-        startActivity(intent);
+//        Intent intent = new Intent(this, GameOver.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.putExtra("scoreCounter",scoreCounter);
+//        startActivity(intent);
+        inputButton.setVisibility(View.INVISIBLE);
+        gameover.setVisibility(View.VISIBLE);
+        restartButton.setVisibility(View.VISIBLE);
     }
 
     //Generates a new portion of the sequence and adds it onto the Array List.

@@ -13,11 +13,13 @@
     tools:context=".simon_motion">
 
     <TextView
-        android:text="h"
+        android:text=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:background = "#000000"
+        android:textColor="#ffffff"
         android:id="@+id/scoreString" />
 
     <Button
@@ -28,60 +30,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="9dp"
         android:onClick="quitButton"
-        android:text="f" />
-
-    <ImageView
-        android:id="@+id/redButton"
-        android:layout_width="170dp"
-        android:layout_height="212dp"
-        android:layout_alignTop="@+id/greenButton"
-        android:layout_marginStart="-1dp"
-        android:layout_marginLeft="-1dp"
-        android:layout_marginTop="8dp"
-        android:layout_toEndOf="@+id/greenButton"
-        android:layout_toRightOf="@+id/greenButton"
-        android:scaleType="matrix"
-        app:srcCompat="@drawable/red_unlit" />
-
-    <ImageView
-        android:id="@+id/yellowButton"
-        android:layout_width="194dp"
-        android:layout_height="289dp"
-        android:layout_below="@+id/greenButton"
-        android:layout_alignStart="@+id/greenButton"
-        android:layout_alignLeft="@+id/greenButton"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="-15dp"
-        android:layout_marginTop="21dp"
-        android:scaleType="matrix"
-        app:srcCompat="@drawable/yellow_unlit" />
-
-    <ImageView
-        android:id="@+id/greenButton"
-        android:layout_width="181dp"
-        android:layout_height="214dp"
-        android:layout_below="@+id/scoreString"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginStart="-1dp"
-        android:layout_marginLeft="-1dp"
-        android:layout_marginTop="14dp"
-        android:adjustViewBounds="false"
-        android:foregroundGravity="top"
-        android:scaleType="matrix"
-        app:srcCompat="@drawable/green_unlit" />
-
-    <ImageView
-        android:id="@+id/blueButton"
-        android:layout_width="211dp"
-        android:layout_height="230dp"
-        android:layout_alignStart="@+id/redButton"
-        android:layout_alignLeft="@+id/redButton"
-        android:layout_alignTop="@+id/yellowButton"
-        android:layout_marginTop="-6dp"
-        android:scaleType="matrix"
-        app:srcCompat="@drawable/blue_unlit" />
+        android:text="Quit" />
 
     <Button
         android:id="@+id/motionButton"
@@ -92,5 +41,78 @@
         android:layout_marginBottom="71dp"
         android:onClick="tap"
         android:text="Tap to Answer" />
+    <Button
+        android:id="@+id/restartButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="71dp"
+        android:onClick="initGame"
+        android:text="Restart"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/greenButton"
+
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="71dp"
+        app:srcCompat="@drawable/green_unlit" />
+
+    <ImageView
+        android:id="@+id/redButton"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+
+        android:layout_marginTop="71dp"
+        android:layout_marginEnd="5dp"
+        app:srcCompat="@drawable/red_unlit" />
+
+    <ImageView
+        android:id="@+id/blueButton"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignTop="@+id/scoreString"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="238dp"
+        android:layout_marginEnd="5dp"
+        app:srcCompat="@drawable/blue_unlit" />
+
+    <ImageView
+        android:id="@+id/yellowButton"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="238dp"
+        app:srcCompat="@drawable/yellow_unlit" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="143dp"
+        android:layout_height="143dp"
+        android:layout_alignTop="@+id/scoreString"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="157dp"
+        android:layout_marginEnd="110dp"
+        app:srcCompat="@drawable/start"
+        android:onClick="initGame"/>
+
+    <ImageView
+        android:id="@+id/gameover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/gameover"
+        android:visibility="invisible"/>
 
 </RelativeLayout>
