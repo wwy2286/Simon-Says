@@ -73,6 +73,7 @@ public class simon_motion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simon);
         context = this;
+        getWindow().getDecorView().setBackgroundColor(Color.BLACK);
         accelerometer=new Accelerometer(this);
         gyroscope = new Gyroscope(this);
         colorToInt.put("RED",2);
@@ -323,7 +324,9 @@ public class simon_motion extends AppCompatActivity {
     private void generateSequence()
     {
         Random RNG = new Random(); //who doesn't love a little randomness :)
-        gameSequence.add(RNG.nextInt(3) + 1);
+        gameSequence.add(RNG.nextInt(4) + 1);
+        //gameSequence.add(4);
+
     }
 
     //This plays the sequence
@@ -427,8 +430,8 @@ public class simon_motion extends AppCompatActivity {
         GreenLit = BitmapFactory.decodeResource(getResources(),R.drawable.green_lit);
         RedUnlit = BitmapFactory.decodeResource(getResources(),R.drawable.red_unlit);
         RedLit = BitmapFactory.decodeResource(getResources(),R.drawable.red_lit);
-        BlueUnlit = BitmapFactory.decodeResource(getResources(),R.drawable.blue_lit);
-        BlueLit = BitmapFactory.decodeResource(getResources(),R.drawable.blue_unlit);
+        BlueUnlit = BitmapFactory.decodeResource(getResources(),R.drawable.blue_unlit);
+        BlueLit = BitmapFactory.decodeResource(getResources(),R.drawable.blue_lit);
         YellowUnlit = BitmapFactory.decodeResource(getResources(),R.drawable.yellow_unlit);
         YellowLit = BitmapFactory.decodeResource(getResources(),R.drawable.yellow_lit);
     }

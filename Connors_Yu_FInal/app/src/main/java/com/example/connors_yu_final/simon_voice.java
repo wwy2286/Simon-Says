@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.speech.RecognizerIntent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,8 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
@@ -105,6 +102,10 @@ public class simon_voice extends AppCompatActivity {
 
 
     private void promptSpeechInput() {
+
+        if (CURRENT_STATE != PLAYER_GUESS){
+            return;
+        }
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -291,7 +292,7 @@ public class simon_voice extends AppCompatActivity {
         ListIterator<Integer> playerSeqITR = bb.listIterator();
 
 
-        int gameSeqPointer, playerSeqPointer;
+        Integer gameSeqPointer, playerSeqPointer;
 
 
 
@@ -299,6 +300,9 @@ public class simon_voice extends AppCompatActivity {
         {
             gameSeqPointer = gameSeqITR.next();
             playerSeqPointer = playerSeqITR.next();
+            if (playerSeqITR == null){
+                return false;
+            }
 
             System.out.println(gameSeqPointer + " : " + playerSeqPointer);
 
@@ -335,7 +339,8 @@ public class simon_voice extends AppCompatActivity {
     private void generateSequence()
     {
         Random RNG = new Random(); //who doesn't love a little randomness :)
-        gameSequence.add(RNG.nextInt(3) + 1);
+        gameSequence.add(RNG.nextInt(4) + 1);
+
     }
 
     //This plays the sequence
@@ -439,8 +444,8 @@ public class simon_voice extends AppCompatActivity {
         GreenLit = BitmapFactory.decodeResource(getResources(),R.drawable.green_lit);
         RedUnlit = BitmapFactory.decodeResource(getResources(),R.drawable.red_unlit);
         RedLit = BitmapFactory.decodeResource(getResources(),R.drawable.red_lit);
-        BlueUnlit = BitmapFactory.decodeResource(getResources(),R.drawable.blue_lit);
-        BlueLit = BitmapFactory.decodeResource(getResources(),R.drawable.blue_unlit);
+        BlueUnlit = BitmapFactory.decodeResource(getResources(),R.drawable.blue_unlit);
+        BlueLit = BitmapFactory.decodeResource(getResources(),R.drawable.blue_lit);
         YellowUnlit = BitmapFactory.decodeResource(getResources(),R.drawable.yellow_unlit);
         YellowLit = BitmapFactory.decodeResource(getResources(),R.drawable.yellow_lit);
     }
