@@ -120,6 +120,10 @@ public class simon_voice extends AppCompatActivity {
                     getString(R.string.speech_not_supported),
                     Toast.LENGTH_SHORT).show();
         }
+
+
+
+
     }
 
     /**
@@ -164,6 +168,18 @@ public class simon_voice extends AppCompatActivity {
                 break;
             }
 
+
+        }
+        winOrLose = compareSequence();
+
+        if (!winOrLose) {
+            CURRENT_STATE = DEAD_STATE;
+            gameOver();
+        }
+        else {
+            CURRENT_STATE = GENERATE_SEQ;
+            scoreCounter++;
+            Score.setText("Score: " + Integer.toString(scoreCounter));
         }
     }
 
@@ -230,26 +246,7 @@ public class simon_voice extends AppCompatActivity {
         //Player repeats/guesses state
         if (CURRENT_STATE == PLAYER_GUESS)
         {
-            darkenLastButton();
-
-            if (colorTouched != 0) {
-                playerSequence.add(colorTouched);
-                colorTouched = 0; //so it doesnt add the same color again
-            }
-
-            if (bb.size() == gameSequence.size()) {
-                winOrLose = compareSequence();
-
-                if (!winOrLose) {
-                    CURRENT_STATE = DEAD_STATE;
-                    gameOver();
-                }
-                else {
-                    CURRENT_STATE = GENERATE_SEQ;
-                    scoreCounter++;
-                    Score.setText("Score: " + Integer.toString(scoreCounter));
-                }
-            }
+        darkenLastButton();
 
         }
         //What this does is, if you're in the player guess state, remove the time delay, so the user can enter the sequence as fast as he/she desires
@@ -296,6 +293,8 @@ public class simon_voice extends AppCompatActivity {
 
         int gameSeqPointer, playerSeqPointer;
 
+
+
         while (gameSeqITR.hasNext() && playerSeqITR.hasNext())
         {
             gameSeqPointer = gameSeqITR.next();
@@ -306,6 +305,11 @@ public class simon_voice extends AppCompatActivity {
             if (gameSeqPointer != playerSeqPointer)
                 return false;
         }
+
+        if (gameSeqITR.hasNext() || playerSeqITR.hasNext()){
+            return false;
+        }
+
         return true;
     }
 
