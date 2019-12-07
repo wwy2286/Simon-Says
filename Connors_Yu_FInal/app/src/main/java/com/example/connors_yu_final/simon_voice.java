@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,6 +40,7 @@ public class simon_voice extends AppCompatActivity {
     private static final int PLAYER_GUESS = 3;
     private static final int DEAD_STATE = 4;
     private static int CURRENT_STATE = 0;
+    private static final int DARK_SEQ = 5;
 
     private static Bitmap GreenUnlit, GreenLit;
     private static Bitmap RedUnlit, RedLit;
@@ -66,6 +68,9 @@ public class simon_voice extends AppCompatActivity {
     private HashMap<String,Integer> colorToInt = new HashMap<>();
     private ArrayList<Integer> bb;
 
+    private ImageView gameover;
+    Button inputButton, restartButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +86,11 @@ public class simon_voice extends AppCompatActivity {
 
         sbut = findViewById(R.id.sbut);
         Score = (TextView)findViewById(R.id.scoreString);
+        gameover = findViewById(R.id.gameover);
+        Score = (TextView)findViewById(R.id.scoreString);
+        restartButton = findViewById(R.id.restartButton);
         setBitMaps();
-        initGame();
+        //initGame();
 
         sbut.setOnClickListener(new View.OnClickListener() {
 
@@ -172,8 +180,11 @@ public class simon_voice extends AppCompatActivity {
         }
     }
 
-    private void initGame()
+    public void initGame(View v)
     {
+        gameover.setVisibility(View.INVISIBLE);
+        sbut.setVisibility(View.VISIBLE);
+        restartButton.setVisibility(View.INVISIBLE);
         gameSequence = new ArrayList<Integer>();
         bb = new ArrayList<Integer>();
         mMoveDelay = 750;
@@ -195,6 +206,7 @@ public class simon_voice extends AppCompatActivity {
     */
     private void update()
     {
+        getWindow().getDecorView().setBackgroundColor(Color.BLACK);
         //Generate Sequence State
         if (CURRENT_STATE == GENERATE_SEQ) {
             clearPlayerSequence();
@@ -207,8 +219,12 @@ public class simon_voice extends AppCompatActivity {
         //Play Sequence State
         if (CURRENT_STATE == PLAY_SEQ) {
             playSequence();
+            CURRENT_STATE = DARK_SEQ;
             if (playSeqCounter == gameSequence.size())
                 CURRENT_STATE = PLAYER_GUESS;
+        } else if (CURRENT_STATE == DARK_SEQ){
+            darkSequence();
+            CURRENT_STATE = PLAY_SEQ;
         }
 
         //Player repeats/guesses state
@@ -238,12 +254,11 @@ public class simon_voice extends AppCompatActivity {
         }
         //What this does is, if you're in the player guess state, remove the time delay, so the user can enter the sequence as fast as he/she desires
         if (CURRENT_STATE == PLAYER_GUESS)
-            SimonButtonHandler.sleep(0);
+            SimonButtonHandler.sleep(mMoveDelay);
             //otherwise, use the normal delay
         else
             SimonButtonHandler.sleep(mMoveDelay);
     }
-
 
 
     public void tap(View view)
@@ -297,19 +312,19 @@ public class simon_voice extends AppCompatActivity {
     //if you click the quit button, goes to quit screen
     public void quitButton(View view)
     {
-        Intent intent = new Intent(this, GameOver.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("scoreCounter",scoreCounter);
-        startActivity(intent);
+        finish();
     }
 
     //Game over state
     private void gameOver()
     {
-        Intent intent = new Intent(this, GameOver.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("scoreCounter",scoreCounter);
-        startActivity(intent);
+//        Intent intent = new Intent(this, GameOver.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.putExtra("scoreCounter",scoreCounter);
+//        startActivity(intent);
+        sbut.setVisibility(View.INVISIBLE);
+        gameover.setVisibility(View.VISIBLE);
+        restartButton.setVisibility(View.VISIBLE);
     }
 
     //Generates a new portion of the sequence and adds it onto the Array List.
@@ -325,9 +340,9 @@ public class simon_voice extends AppCompatActivity {
         long time = System.currentTimeMillis();
 
         if (time - mLastMove > mMoveDelay) {
-            if (playSeqCounter != 0) {
-                darkenButton(playSeqCounter - 1);
-            }
+//            if (playSeqCounter != 0) {
+//                darkenButton(playSeqCounter - 1);
+//            }
             if (playSeqCounter < gameSequence.size()) {
                 lightButton(playSeqCounter);
                 System.out.println(playSeqCounter);
@@ -335,6 +350,17 @@ public class simon_voice extends AppCompatActivity {
             }
             mLastMove = time;
         }
+    }
+
+    private void darkSequence(){
+        long time = System.currentTimeMillis();
+
+        if (time - mLastMove > mMoveDelay) {
+            if(playSeqCounter != 0){
+                darkenButton(playSeqCounter -1);
+            }
+        }
+        mLastMove = time;
     }
 
     //All this function does is darken the last button in the sequence.
