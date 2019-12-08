@@ -31,12 +31,7 @@ public class simon_motion extends AppCompatActivity {
 
     //the flow of the game should be
     //generate the sequence, play the sequence for the player, player plays it back
-    private static final int GENERATE_SEQ = 1;
-    private static final int PLAY_SEQ = 2;
-    private static final int PLAYER_GUESS = 3;
-    private static final int DEAD_STATE = 4;
-    private static int CURRENT_STATE = 0;
-    private static final int DARK_SEQ = 5;
+    State curr_state = new State("");
 
     private static Bitmap GreenUnlit, GreenLit;
     private static Bitmap RedUnlit, RedLit;
@@ -98,8 +93,19 @@ public class simon_motion extends AppCompatActivity {
 
         //gyroscope.unregister();
 
-    //initGame();
-    //gyroscope.unregister();
+        //initGame();
+        //gyroscope.unregister();
+
+    }
+
+    private class State {
+        String state = "";
+        public State() {
+        }
+
+        public State(String state) {
+            this.state = state;
+        }
 
     }
 
@@ -146,24 +152,24 @@ public class simon_motion extends AppCompatActivity {
             public void onTranslation(float tx, float ty, float tz) {
 //                System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
 //                Toast.makeText(context, "x = " + tx + " y = " + ty + " z = " + tz , Toast.LENGTH_LONG);
-                if(tx>2.0f && ty>2.0f && CURRENT_STATE == PLAYER_GUESS){
+                if(tx>2.0f && ty>2.0f && (curr_state.state.equals( "Guess"))){
                     getWindow().getDecorView().setBackgroundColor(Color.RED);
                     bb.add(2);
                     System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
                     gyroscope.unregister();
                 }
-                else if(tx>2.0f && ty<-2.0f && CURRENT_STATE == PLAYER_GUESS){
+                else if(tx>2.0f && ty<-2.0f && (curr_state.state.equals(  "Guess"))){
                     getWindow().getDecorView().setBackgroundColor(Color.BLUE);
                     bb.add(4);
                     System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
                     gyroscope.unregister();
                 }
-                else if(tx<-2.0f && ty>2.0f && CURRENT_STATE == PLAYER_GUESS){
+                else if(tx<-2.0f && ty>2.0f && (curr_state.state.equals( "Guess"))){
                     getWindow().getDecorView().setBackgroundColor(Color.GREEN);
                     bb.add(1);
                     System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
                     gyroscope.unregister();
-                } else if(tx<-2.0f && ty<-2.0f && CURRENT_STATE == PLAYER_GUESS){
+                } else if(tx<-2.0f && ty<-2.0f && (curr_state.state.equals(  "Guess"))){
                     getWindow().getDecorView().setBackgroundColor(Color.YELLOW);
                     bb.add(3);
                     System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
@@ -199,7 +205,7 @@ public class simon_motion extends AppCompatActivity {
         playSeqCounter = 0;
         colorTouched = 0;
         scoreCounter = 0;
-        CURRENT_STATE = GENERATE_SEQ;
+        curr_state.state = "Start";
         update();
     }
 
@@ -207,27 +213,27 @@ public class simon_motion extends AppCompatActivity {
     {
         getWindow().getDecorView().setBackgroundColor(Color.BLACK);
         //Generate Sequence State
-        if (CURRENT_STATE == GENERATE_SEQ) {
+        if (curr_state.state.equals("Start")) {
             clearPlayerSequence();
             generateSequence();
             playSeqCounter = 0; //reset the player sequence counter
-            CURRENT_STATE = PLAY_SEQ;
+            curr_state.state = "Play";
 
         }
 
         //Play Sequence State
-        if (CURRENT_STATE == PLAY_SEQ) {
+        if (curr_state.state.equals("Play")) {
             playSequence();
-            CURRENT_STATE = DARK_SEQ;
+            curr_state.state = "Darken";
             if (playSeqCounter == gameSequence.size())
-                CURRENT_STATE = PLAYER_GUESS;
-        } else if (CURRENT_STATE == DARK_SEQ){
+                curr_state.state = "Guess";
+        } else if ((curr_state.state.equals("Darken"))){
             darkSequence();
-            CURRENT_STATE = PLAY_SEQ;
+            curr_state.state = "Play";
         }
 
         //Player repeats/guesses state
-        if (CURRENT_STATE == PLAYER_GUESS)
+        if ((curr_state.state.equals("Guess")))
         {
             darkenLastButton();
 
@@ -240,11 +246,11 @@ public class simon_motion extends AppCompatActivity {
                 winOrLose = compareSequence();
 
                 if (!winOrLose) {
-                    CURRENT_STATE = DEAD_STATE;
+                    curr_state.state = "Done";
                     gameOver();
                 }
                 else {
-                    CURRENT_STATE = GENERATE_SEQ;
+                    curr_state.state = "Start";
                     scoreCounter++;
                     Score.setText("Score: " + Integer.toString(scoreCounter));
                 }
@@ -252,7 +258,7 @@ public class simon_motion extends AppCompatActivity {
 
         }
         //What this does is, if you're in the player guess state, remove the time delay, so the user can enter the sequence as fast as he/she desires
-        if (CURRENT_STATE == PLAYER_GUESS)
+        if ((curr_state.state.equals(  "Guess")))
             SimonButtonHandler.sleep(mMoveDelay);
             //otherwise, use the normal delay
         else
@@ -266,8 +272,8 @@ public class simon_motion extends AppCompatActivity {
 
 //        setGyroscopeListener();
 //        gyroscope.register();
-            setAccelerometerListener();
-            accelerometer.register();
+        setAccelerometerListener();
+        accelerometer.register();
 
     }
 
@@ -369,57 +375,48 @@ public class simon_motion extends AppCompatActivity {
         }
     }
 
-    //Lightens the given button index
-    private void lightButton(int index)
-    {
+    private void lightButton(int index) {
         ImageView litImage;
 
-        switch (gameSequence.get(index)) {
-            case GREEN:
-                litImage = (ImageView) findViewById(R.id.greenButton);
-                litImage.setImageBitmap(GreenLit);
-                System.out.println("GREEN");
-                break;
-            case RED:
-                litImage = (ImageView) findViewById(R.id.redButton);
-                litImage.setImageBitmap(RedLit);
-                System.out.println("RED");
-                break;
-            case BLUE:
-                litImage = (ImageView) findViewById(R.id.blueButton);
-                litImage.setImageBitmap(BlueLit);
-                System.out.println("BLUE");
-                break;
-            case YELLOW:
-                litImage = (ImageView) findViewById(R.id.yellowButton);
-                litImage.setImageBitmap(YellowLit);
-                System.out.println("YELLOW");
-                break;
+        if (gameSequence.get(index).equals(GREEN)){
+            litImage = (ImageView) findViewById(R.id.greenButton);
+            litImage.setImageBitmap(GreenLit);
+        }
+        if (gameSequence.get(index).equals(RED)){
+            litImage = (ImageView) findViewById(R.id.redButton);
+            litImage.setImageBitmap(RedLit);
+        }
+        if (gameSequence.get(index).equals(BLUE)){
+            litImage = (ImageView) findViewById(R.id.blueButton);
+            litImage.setImageBitmap(BlueLit);
+        }
+        if (gameSequence.get(index).equals(YELLOW)){
+            litImage = (ImageView) findViewById(R.id.yellowButton);
+            litImage.setImageBitmap(YellowLit);
         }
     }
 
-    //Darkens the given button index
-    private void darkenButton(int index)
-    {
+
+    private void darkenButton(int index) {
         ImageView litImage;
 
-        switch (gameSequence.get(index)) {
-            case GREEN:
-                litImage = (ImageView) findViewById(R.id.greenButton);
-                litImage.setImageBitmap(GreenUnlit);
-                break;
-            case RED:
-                litImage = (ImageView) findViewById(R.id.redButton);
-                litImage.setImageBitmap(RedUnlit);
-                break;
-            case BLUE:
-                litImage = (ImageView) findViewById(R.id.blueButton);
-                litImage.setImageBitmap(BlueUnlit);
-                break;
-            case YELLOW:
-                litImage = (ImageView) findViewById(R.id.yellowButton);
-                litImage.setImageBitmap(YellowUnlit);
-                break;
+        //switch (gameSequence.get(index)) {
+
+        if (gameSequence.get(index).equals(GREEN)){
+            litImage = (ImageView) findViewById(R.id.greenButton);
+            litImage.setImageBitmap(GreenUnlit);
+        }
+        if (gameSequence.get(index).equals(RED)){
+            litImage = (ImageView) findViewById(R.id.redButton);
+            litImage.setImageBitmap(RedUnlit);
+        }
+        if (gameSequence.get(index).equals(BLUE)){
+            litImage = (ImageView) findViewById(R.id.blueButton);
+            litImage.setImageBitmap(BlueUnlit);
+        }
+        if (gameSequence.get(index).equals(YELLOW)){
+            litImage = (ImageView) findViewById(R.id.yellowButton);
+            litImage.setImageBitmap(YellowUnlit);
         }
     }
 
