@@ -155,10 +155,19 @@ public class simon_motion extends AppCompatActivity {
             // Toast.makeText(this, "You have achieved a new high score!", Toast.LENGTH_LONG).show();
              userInitial = input.getText().toString();
              if (userInitial.equals("")){
-                 Toast.makeText(context, "Please enter your intial", Toast.LENGTH_LONG).show();
+                 Toast.makeText(context, "Initial can not be empty", Toast.LENGTH_LONG).show();
                  askInitial();
+             } else if (userInitial.length() != 3) {
+                 Toast.makeText(context, "Initial must be three letters", Toast.LENGTH_LONG).show();
+                 askInitial();
+             }else if (!isStringOnlyAlphabet(userInitial)){
+
+                 Toast.makeText(context, "Initial must contain only letters", Toast.LENGTH_LONG).show();
+                 askInitial();
+
              } else {
                  dbHelper.updateScore(scoreCounter, userInitial,2);
+                 Toast.makeText(context, "High Score Added", Toast.LENGTH_LONG).show();
              }
 
          }
@@ -574,6 +583,13 @@ public class simon_motion extends AppCompatActivity {
 
         accelerometer.unregister();
         gyroscope.unregister();
+    }
+
+    public static boolean isStringOnlyAlphabet(String str)
+    {
+        return ((str != null)
+                && (!str.equals(""))
+                && (str.matches("^[a-zA-Z]*$")));
     }
 
 
