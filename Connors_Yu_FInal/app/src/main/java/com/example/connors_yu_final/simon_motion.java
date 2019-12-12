@@ -397,7 +397,7 @@ public class simon_motion extends AppCompatActivity {
         if (scoreCounter>currHighscore){
             currHighscore = scoreCounter;
             dbHelper.updateScore(scoreCounter, 2);
-            Toast.makeText(this, "This is a new high score!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "You have achieved a new high score!", Toast.LENGTH_LONG).show();
         }
         HighScore.setText("Your score is " + currHighscore + "!");
         HighScore.setVisibility(View.VISIBLE);
