@@ -599,6 +599,8 @@ public class simon_motion extends AppCompatActivity {
 
         accelerometer.unregister();
         gyroscope.unregister();
+
+
     }
 
     public static boolean isStringOnlyAlphabet(String str)
@@ -607,6 +609,13 @@ public class simon_motion extends AppCompatActivity {
                 && (!str.equals(""))
                 && (str.matches("^[a-zA-Z]*$")));
     }
-
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        redSound.stop();
+        blueSound.stop();
+        greenSound.stop();
+        yellowSound.stop();
+    }
 
 }

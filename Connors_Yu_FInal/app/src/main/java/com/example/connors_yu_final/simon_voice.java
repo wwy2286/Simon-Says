@@ -511,5 +511,19 @@ public class simon_voice extends AppCompatActivity {
                 && (str.matches("^[a-zA-Z]*$")));
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        redSound.stop();
+        blueSound.stop();
+        greenSound.stop();
+        yellowSound.stop();
+    }
 
 }
