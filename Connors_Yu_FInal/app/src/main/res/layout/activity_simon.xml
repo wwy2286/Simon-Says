@@ -144,5 +144,12 @@
         android:text="@string/motion_instruction"
         android:textSize="30dp"
         android:onClick="removeInstruction"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/initial_text"
+        android:visibility="invisible"
+        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        />
 
 </RelativeLayout>

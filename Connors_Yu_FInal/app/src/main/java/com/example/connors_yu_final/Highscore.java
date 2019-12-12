@@ -19,10 +19,10 @@ public class Highscore extends AppCompatActivity {
     private SQLiteDatabase db = null;
     private DatabaseOpenHelper dbHelper = null;
     final static String DBNAME = "highscoreTable";
-    final static String GAMETYPE = "gametype";
+    final static String USERINITIAL = "userinitial";
     final static String HIGHSCORE = "highscore";
     final static String ID = "_id";
-    final static String[] columns = {ID, GAMETYPE, HIGHSCORE};
+    final static String[] columns = {ID, USERINITIAL, HIGHSCORE};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +35,9 @@ public class Highscore extends AppCompatActivity {
         db = dbHelper.getWritableDatabase();
         Cursor c = readDB();
         c.moveToPosition(0);
-        voiceHighscore.setText("Voice high score is " + c.getInt(2));
+        voiceHighscore.setText("Voice high score is " + c.getInt(2) + " by " + c.getString(1));
         c.moveToPosition(1);
-        motionHighscore.setText("Motion high score is " +c.getInt(2));
+        motionHighscore.setText("Motion high score is " +c.getInt(2) + " by " + c.getString(1));
 
 
     }
@@ -48,8 +48,8 @@ public class Highscore extends AppCompatActivity {
     }
     public void deleteHighScore(View v){
         dbHelper.deleteDatabase();
-        voiceHighscore.setText("Voice high score is " + 0);
-        motionHighscore.setText("Motion high score is " + 0);
+        voiceHighscore.setText("Voice high score is " + 0 + " by no one");
+        motionHighscore.setText("Motion high score is " + 0 + " by no one");
     }
 
 }

@@ -9,13 +9,13 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper{
 
     final static String DBNAME = "highscoreTable";
     final static String ID = "_id";
-    final static String GAMETYPE = "gametype";
+    final static String USERINITIAL = "userinitial";
     final static String HIGHSCORE = "highscore";
 
     final private static String CREATE_CMD =
             "CREATE TABLE "+DBNAME+" (" + ID +
                     " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    GAMETYPE + " TEXT NOT NULL, " + HIGHSCORE + " INTEGER NOT NULL)" ;
+                    USERINITIAL + " TEXT NOT NULL, " + HIGHSCORE + " INTEGER NOT NULL)" ;
 
     final private static Integer VERSION = 1;
     final private Context context;
@@ -30,11 +30,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper{
         db.execSQL(CREATE_CMD);
         ContentValues values = new ContentValues(2);
 
-        values.put(GAMETYPE, "Voice");
+        values.put(USERINITIAL, "no one");
         values.put(HIGHSCORE, 0);
         db.insert(DBNAME,null,values);
         values.clear();
-        values.put(GAMETYPE, "Motion");
+        values.put(USERINITIAL, "no one");
         values.put(HIGHSCORE, 0);
         db.insert(DBNAME,null,values);
     }
@@ -54,5 +54,15 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper{
         //String query = "UPDATE " + DBNAME + " SET " + HIGHSCORE + " = '" + newHighscore + "' WHERE " + ID + " = '" + 1 + "'" + " AND " + HIGHSCORE + " = '" + 0 + "'";
         String query = "UPDATE " + DBNAME + " SET " + HIGHSCORE + " = '" + newHighscore + "' WHERE " + ID + " = '" + id + "'";
         db.execSQL(query);
+    }
+
+    public void updateScore(int newHighscore, String name, int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        //String query = "UPDATE " + DBNAME + " SET " + HIGHSCORE + " = '" + newHighscore + "' WHERE " + ID + " = '" + 1 + "'" + " AND " + HIGHSCORE + " = '" + 0 + "'";
+        String query = "UPDATE " + DBNAME + " SET " + HIGHSCORE + " = '" + newHighscore + "' WHERE " + ID + " = '" + id + "'";
+        db.execSQL(query);
+         query = "UPDATE " + DBNAME + " SET " + USERINITIAL + " = '" + name + "' WHERE " + ID + " = '" + id + "'";
+        db.execSQL(query);
+
     }
 }

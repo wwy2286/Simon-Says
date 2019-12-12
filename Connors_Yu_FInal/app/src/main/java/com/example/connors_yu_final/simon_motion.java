@@ -1,8 +1,10 @@
 package com.example.connors_yu_final;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,8 +14,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +35,8 @@ public class simon_motion extends AppCompatActivity {
     private final static int RED = 2;
     private final static int YELLOW = 3;
     private final static int BLUE = 4;
+    private String userInitial;
+    private EditText input = null;
 
     //the flow of the game should be
     //generate the sequence, play the sequence for the player, player plays it back
@@ -47,6 +54,7 @@ public class simon_motion extends AppCompatActivity {
     //the two arrays that will dictate the game
     private static ArrayList<Integer> gameSequence;
     private static ArrayList<Integer> playerSequence;
+    private int MAX_NUM=3;
 
     private static long mLastMove;
     private static long mMoveDelay;
@@ -59,10 +67,10 @@ public class simon_motion extends AppCompatActivity {
     private SQLiteDatabase db = null;
     private DatabaseOpenHelper dbHelper = null;
     final static String DBNAME = "highscoreTable";
-    final static String GAMETYPE = "gametype";
+    final static String USERINITIAL = "userinitial";
     final static String HIGHSCORE = "highscore";
     final static String ID = "_id";
-    final static String[] columns = {ID, GAMETYPE, HIGHSCORE};
+    final static String[] columns = {ID, USERINITIAL, HIGHSCORE};
 
 
     private HashMap<String,Integer> colorToInt = new HashMap<>();
@@ -124,7 +132,43 @@ public class simon_motion extends AppCompatActivity {
 
     }
 
+ private void askInitial(){
+     AlertDialog.Builder builder = new AlertDialog.Builder(this);
+     builder.setTitle("Enter your initial");
 
+// Set up the input
+      input = new EditText(this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+     input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+     input.setFilters(new InputFilter[] { new InputFilter.LengthFilter(MAX_NUM), new InputFilter.AllCaps() });
+     builder.setView(input);
+
+// Set up the buttons
+     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+         @Override
+         public void onClick(DialogInterface dialog, int which) {
+
+            // Toast.makeText(this, "You have achieved a new high score!", Toast.LENGTH_LONG).show();
+             userInitial = input.getText().toString();
+             if (userInitial.equals("")){
+                 Toast.makeText(context, "Please enter your intial", Toast.LENGTH_LONG).show();
+                 askInitial();
+             } else {
+                 dbHelper.updateScore(scoreCounter, userInitial,2);
+             }
+
+         }
+     });
+     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+         @Override
+         public void onClick(DialogInterface dialog, int which) {
+             dialog.cancel();
+         }
+     });
+
+     builder.show();
+ }
     private Cursor readDB() {
         return db.query(dbHelper.DBNAME, columns, null,null, null, null,
                 null);
@@ -396,10 +440,10 @@ public class simon_motion extends AppCompatActivity {
         restartButton.setVisibility(View.VISIBLE);
         if (scoreCounter>currHighscore){
             currHighscore = scoreCounter;
-            dbHelper.updateScore(scoreCounter, 2);
+            askInitial();
             Toast.makeText(this, "You have achieved a new high score!", Toast.LENGTH_LONG).show();
         }
-        HighScore.setText("Your score is " + currHighscore + "!");
+        HighScore.setText("Your score is " + scoreCounter + "!");
         HighScore.setVisibility(View.VISIBLE);
     }
 
