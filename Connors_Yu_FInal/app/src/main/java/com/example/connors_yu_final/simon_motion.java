@@ -40,7 +40,7 @@ public class simon_motion extends AppCompatActivity {
     private static Bitmap BlueUnlit, BlueLit;
     private static Bitmap YellowUnlit, YellowLit;
     private ImageView gameover;
-    Button inputButton, restartButton;
+    Button inputButton, restartButton, instructionButton;
 
     private static TextView Score, HighScore;
 
@@ -96,6 +96,7 @@ public class simon_motion extends AppCompatActivity {
         yellowLit = (ImageView) findViewById(R.id.yellowButton);
         blueLit = (ImageView) findViewById(R.id.blueButton);
         HighScore = findViewById(R.id.scoreView);
+        instructionButton = findViewById(R.id.instructionButton);
 
         dbHelper = new DatabaseOpenHelper(this);
         // dbHelper.deleteDatabase();
@@ -139,6 +140,9 @@ public class simon_motion extends AppCompatActivity {
 
     }
 
+    public void removeInstruction(View v){
+        instructionButton.setVisibility(View.INVISIBLE);
+    }
     public void setAccelerometerListener(){
         accelerometer.setListener(new Accelerometer.Listener() {
             @Override

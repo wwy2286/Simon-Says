@@ -8,4 +8,6 @@
     <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
     <string name="tap_on_mic">Tap on mic to speak</string>
     <string name="title_activity_highscore">Highscore</string>
+    <string name="motion_instruction">In order to play motion simon, user must tap on the input button before inputting each motion. The motion should correspond with the direction of the color you wish to input. Click here to begin.</string>
+    <string name="voice_instruction">In order to play voice simon, user must tap on the input button before submitting voice inputs. User needs to submit the full sequence of colors each time. Click here to begin.</string>
 </resources>

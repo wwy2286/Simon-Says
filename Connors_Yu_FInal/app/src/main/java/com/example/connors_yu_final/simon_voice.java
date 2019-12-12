@@ -52,7 +52,7 @@ public class simon_voice extends AppCompatActivity {
     private static int colorTouched;
     private static boolean winOrLose;
     private static int scoreCounter;
-    private static Button sbut;
+    private static Button sbut, instructionButton;
     private final int REQ_CODE_SPEECH_INPUT = 100;
     Button inputButton, restartButton;
     buttonHandler SimonButtonHandler = new buttonHandler();
@@ -82,7 +82,7 @@ public class simon_voice extends AppCompatActivity {
         colorToInt.put("GREEN", 1);
         colorToInt.put("YELLOW", 3);
         colorToInt.put("BLUE", 4);
-
+        instructionButton = findViewById(R.id.instructionButton);
 
         sbut = findViewById(R.id.sbut);
         HighScore = findViewById(R.id.scoreView);
@@ -110,6 +110,9 @@ public class simon_voice extends AppCompatActivity {
         int id = c.getInt(0);
         currHighscore = c.getInt(2);
 
+    }
+    public void removeInstruction(View v){
+        instructionButton.setVisibility(View.INVISIBLE);
     }
 
     private Cursor readDB() {
