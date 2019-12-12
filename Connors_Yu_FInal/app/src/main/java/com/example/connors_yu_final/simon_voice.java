@@ -103,7 +103,7 @@ public class simon_voice extends AppCompatActivity {
             }
         });
         dbHelper = new DatabaseOpenHelper(this);
-       dbHelper.deleteDatabase();
+       //dbHelper.deleteDatabase();
         db = dbHelper.getWritableDatabase();
         Cursor c = readDB();
         c.moveToPosition(0);

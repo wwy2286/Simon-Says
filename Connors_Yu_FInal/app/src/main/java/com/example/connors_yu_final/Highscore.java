@@ -46,5 +46,10 @@ public class Highscore extends AppCompatActivity {
         return db.query(dbHelper.DBNAME, columns, null,null, null, null,
                 null);
     }
+    public void deleteHighScore(View v){
+        dbHelper.deleteDatabase();
+        voiceHighscore.setText("Voice high score is " + 0);
+        motionHighscore.setText("Motion high score is " + 0);
+    }
 
 }
