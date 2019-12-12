@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         welcome.setGravity(Gravity.CENTER);
         voice_b = findViewById(R.id.voice_b);
         motion_b = findViewById(R.id.motion_b);
-        welcome.setTextColor(Color.WHITE    );
+        welcome.setTextColor(Color.WHITE);
         voice_b.setTextColor(Color.WHITE);
     }
 
@@ -35,6 +35,11 @@ public class MainActivity extends AppCompatActivity {
     public void motionClick(View view)
     {
         Intent intent = new Intent(this,simon_motion.class);
+        startActivity(intent);
+    }
+
+    public void highscoreClick(View view){
+        Intent intent = new Intent(this,Highscore.class);
         startActivity(intent);
     }
 }

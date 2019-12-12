@@ -2,6 +2,8 @@ package com.example.connors_yu_final;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -61,6 +63,13 @@ public class simon_voice extends AppCompatActivity {
     private ImageView gameover;
     State curr_state = new State("");
     private int currHighscore;
+    private SQLiteDatabase db = null;
+    private DatabaseOpenHelper dbHelper = null;
+    final static String DBNAME = "highscoreTable";
+    final static String GAMETYPE = "gametype";
+    final static String HIGHSCORE = "highscore";
+    final static String ID = "_id";
+    final static String[] columns = {ID, GAMETYPE, HIGHSCORE};
 
 
     @Override
@@ -93,7 +102,19 @@ public class simon_voice extends AppCompatActivity {
                 promptSpeechInput();
             }
         });
+        dbHelper = new DatabaseOpenHelper(this);
+       dbHelper.deleteDatabase();
+        db = dbHelper.getWritableDatabase();
+        Cursor c = readDB();
+        c.moveToPosition(0);
+        int id = c.getInt(0);
+        currHighscore = c.getInt(2);
 
+    }
+
+    private Cursor readDB() {
+        return db.query(dbHelper.DBNAME, columns, null,null, null, null,
+                null);
     }
 
     private void promptSpeechInput() {
@@ -171,20 +192,7 @@ public class simon_voice extends AppCompatActivity {
     }
 
     public void initGame(View v) {
-
-            greenLit.setImageBitmap(GreenUnlit);
-
-
-            redLit.setImageBitmap(RedUnlit);
-
-
-            yellowLit.setImageBitmap(YellowUnlit);
-
-        blueLit.setImageBitmap(BlueUnlit);
-        HighScore.setVisibility(View.INVISIBLE);
-        gameover.setVisibility(View.INVISIBLE);
-        sbut.setVisibility(View.VISIBLE);
-        restartButton.setVisibility(View.INVISIBLE);
+        restart(v);
         gameSequence = new ArrayList<Integer>();
         bb = new ArrayList<Integer>();
         mMoveDelay = 750;
@@ -314,8 +322,10 @@ public class simon_voice extends AppCompatActivity {
 
         if (scoreCounter>currHighscore){
             currHighscore = scoreCounter;
+            dbHelper.updateScore(scoreCounter, 1);
+            Toast.makeText(this, "This is a new high score!", Toast.LENGTH_LONG).show();
         }
-        HighScore.setText("Highscore is " + currHighscore + "!");
+        HighScore.setText("Your score is " + scoreCounter + "!");
         HighScore.setVisibility(View.VISIBLE);
     }
 
@@ -425,5 +435,7 @@ public class simon_voice extends AppCompatActivity {
             sendMessageDelayed(obtainMessage(0), delayMillis);
         }
     }
+
+
 
 }

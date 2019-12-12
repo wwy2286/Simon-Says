@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -54,6 +56,13 @@ public class simon_motion extends AppCompatActivity {
     private static int scoreCounter;
     private ImageView greenLit, redLit, blueLit, yellowLit;
     private int currHighscore;
+    private SQLiteDatabase db = null;
+    private DatabaseOpenHelper dbHelper = null;
+    final static String DBNAME = "highscoreTable";
+    final static String GAMETYPE = "gametype";
+    final static String HIGHSCORE = "highscore";
+    final static String ID = "_id";
+    final static String[] columns = {ID, GAMETYPE, HIGHSCORE};
 
 
     private HashMap<String,Integer> colorToInt = new HashMap<>();
@@ -87,6 +96,14 @@ public class simon_motion extends AppCompatActivity {
         yellowLit = (ImageView) findViewById(R.id.yellowButton);
         blueLit = (ImageView) findViewById(R.id.blueButton);
         HighScore = findViewById(R.id.scoreView);
+
+        dbHelper = new DatabaseOpenHelper(this);
+        // dbHelper.deleteDatabase();
+        db = dbHelper.getWritableDatabase();
+        Cursor c = readDB();
+        c.moveToPosition(1);
+        int id = c.getInt(0);
+        currHighscore = c.getInt(2);
         //gyroscope.unregister();
         //setGyroscopeListener();
         setBitMaps();
@@ -106,6 +123,11 @@ public class simon_motion extends AppCompatActivity {
 
     }
 
+
+    private Cursor readDB() {
+        return db.query(dbHelper.DBNAME, columns, null,null, null, null,
+                null);
+    }
     private class State {
         String state = "";
         public State() {
@@ -222,19 +244,7 @@ public class simon_motion extends AppCompatActivity {
     public void initGame(View v)
     {
 
-        HighScore.setVisibility(View.INVISIBLE);
-        greenLit.setImageBitmap(GreenUnlit);
-
-
-        redLit.setImageBitmap(RedUnlit);
-
-
-        yellowLit.setImageBitmap(YellowUnlit);
-
-        blueLit.setImageBitmap(BlueUnlit);
-        gameover.setVisibility(View.INVISIBLE);
-        inputButton.setVisibility(View.VISIBLE);
-        restartButton.setVisibility(View.INVISIBLE);
+        restart(v);
         gameSequence = new ArrayList<Integer>();
         bb = new ArrayList<Integer>();
         mMoveDelay = 750;
@@ -376,17 +386,16 @@ public class simon_motion extends AppCompatActivity {
     //Game over state
     private void gameOver()
     {
-//        Intent intent = new Intent(this, GameOver.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.putExtra("scoreCounter",scoreCounter);
-//        startActivity(intent);
+
         inputButton.setVisibility(View.INVISIBLE);
         gameover.setVisibility(View.VISIBLE);
         restartButton.setVisibility(View.VISIBLE);
         if (scoreCounter>currHighscore){
             currHighscore = scoreCounter;
+            dbHelper.updateScore(scoreCounter, 2);
+            Toast.makeText(this, "This is a new high score!", Toast.LENGTH_LONG).show();
         }
-        HighScore.setText("Highscore is " + currHighscore + "!");
+        HighScore.setText("Your score is " + currHighscore + "!");
         HighScore.setVisibility(View.VISIBLE);
     }
 

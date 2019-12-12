@@ -41,6 +41,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="motionClick"
-            android:text="Motion-Based" />
+            android:text="Motion-Based"
+            android:textColor="#ffffff"/>
+
+
+        <Button
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="highscoreClick"
+            android:text="View Highscore"
+            android:textColor="#ffffff"/>
     </LinearLayout>
 </LinearLayout>
