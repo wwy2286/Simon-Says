@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -79,7 +80,7 @@ public class simon_voice extends AppCompatActivity {
     final static String ID = "_id";
     final static String[] columns = {ID, USERINITIAL, HIGHSCORE};
     Context context;
-
+    private MediaPlayer redSound, blueSound, greenSound, yellowSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +120,10 @@ public class simon_voice extends AppCompatActivity {
         c.moveToPosition(0);
         int id = c.getInt(0);
         currHighscore = c.getInt(2);
+        blueSound = MediaPlayer.create(this, R.raw.blue);
+        redSound = MediaPlayer.create(this, R.raw.red);
+        greenSound = MediaPlayer.create(this, R.raw.green);
+        yellowSound = MediaPlayer.create(this, R.raw.yellow);
 
     }
     public void removeInstruction(View v){
@@ -433,18 +438,22 @@ public class simon_voice extends AppCompatActivity {
         if (gameSequence.get(index).equals(GREEN)){
             litImage = (ImageView) findViewById(R.id.greenButton);
             litImage.setImageBitmap(GreenLit);
+            greenSound.start();
         }
         if (gameSequence.get(index).equals(RED)){
             litImage = (ImageView) findViewById(R.id.redButton);
             litImage.setImageBitmap(RedLit);
+            redSound.start();
         }
         if (gameSequence.get(index).equals(BLUE)){
             litImage = (ImageView) findViewById(R.id.blueButton);
             litImage.setImageBitmap(BlueLit);
+            blueSound.start();
         }
         if (gameSequence.get(index).equals(YELLOW)){
             litImage = (ImageView) findViewById(R.id.yellowButton);
             litImage.setImageBitmap(YellowLit);
+            yellowSound.start();
         }
     }
 

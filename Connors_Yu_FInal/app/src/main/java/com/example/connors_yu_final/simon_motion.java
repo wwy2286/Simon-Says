@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -71,6 +72,8 @@ public class simon_motion extends AppCompatActivity {
     final static String HIGHSCORE = "highscore";
     final static String ID = "_id";
     final static String[] columns = {ID, USERINITIAL, HIGHSCORE};
+     private MediaPlayer redSound, blueSound, greenSound, yellowSound;
+
 
 
     private HashMap<String,Integer> colorToInt = new HashMap<>();
@@ -120,6 +123,11 @@ public class simon_motion extends AppCompatActivity {
         setBitMaps();
         inputButton.setEnabled(false);
         //setAccelerometerListener();
+
+       blueSound = MediaPlayer.create(this, R.raw.blue);
+        redSound = MediaPlayer.create(this, R.raw.red);
+        greenSound = MediaPlayer.create(this, R.raw.green);
+        yellowSound = MediaPlayer.create(this, R.raw.yellow);
 
 
 
@@ -207,6 +215,7 @@ public class simon_motion extends AppCompatActivity {
                 Toast.makeText(context, "x = " + tx + " y = " + ty + " z = " + tz , Toast.LENGTH_LONG);
                 if(tx>1.0f && ty>1.0f){
                     getWindow().getDecorView().setBackgroundColor(Color.RED);
+                  redSound.start();
                     System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
                     bb.add(2);
 //                    if (compareSequence() == false){
@@ -218,6 +227,7 @@ public class simon_motion extends AppCompatActivity {
                 }
                 else if(tx>1.0f && ty<-1.0f){
                     getWindow().getDecorView().setBackgroundColor(Color.BLUE);
+                    blueSound.start();
                     System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
 
                     bb.add(4);
@@ -230,6 +240,7 @@ public class simon_motion extends AppCompatActivity {
                 else if(tx<-1.0f && ty>1.0f){
                     getWindow().getDecorView().setBackgroundColor(Color.GREEN);
                     System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
+                    greenSound.start();
                     bb.add(1);
 //                    if (compareSequence() == false){
 //                        curr_state.state = "Done";
@@ -239,6 +250,7 @@ public class simon_motion extends AppCompatActivity {
                 } else if(tx<-1.0f && ty<-1.0f){
                     getWindow().getDecorView().setBackgroundColor(Color.YELLOW);
                     System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
+                    yellowSound.start();
                     bb.add(3);
 //                    if (compareSequence() == false){
 //                        curr_state.state = "Done";
@@ -517,18 +529,22 @@ public class simon_motion extends AppCompatActivity {
         if (gameSequence.get(index).equals(GREEN)){
             litImage = (ImageView) findViewById(R.id.greenButton);
             litImage.setImageBitmap(GreenLit);
+            greenSound.start();
         }
         if (gameSequence.get(index).equals(RED)){
             litImage = (ImageView) findViewById(R.id.redButton);
             litImage.setImageBitmap(RedLit);
+            redSound.start();
         }
         if (gameSequence.get(index).equals(BLUE)){
             litImage = (ImageView) findViewById(R.id.blueButton);
             litImage.setImageBitmap(BlueLit);
+            blueSound.start();
         }
         if (gameSequence.get(index).equals(YELLOW)){
             litImage = (ImageView) findViewById(R.id.yellowButton);
             litImage.setImageBitmap(YellowLit);
+            yellowSound.start();
         }
     }
 
