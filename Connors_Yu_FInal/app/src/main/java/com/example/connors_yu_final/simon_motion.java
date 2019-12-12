@@ -105,6 +105,8 @@ public class simon_motion extends AppCompatActivity {
         blueLit = (ImageView) findViewById(R.id.blueButton);
         HighScore = findViewById(R.id.scoreView);
         instructionButton = findViewById(R.id.instructionButton);
+        gameSequence = new ArrayList<Integer>();
+        bb = new ArrayList<Integer>();
 
         dbHelper = new DatabaseOpenHelper(this);
         // dbHelper.deleteDatabase();
@@ -116,6 +118,7 @@ public class simon_motion extends AppCompatActivity {
         //gyroscope.unregister();
         //setGyroscopeListener();
         setBitMaps();
+        inputButton.setEnabled(false);
         //setAccelerometerListener();
 
 
@@ -312,6 +315,7 @@ public class simon_motion extends AppCompatActivity {
             generateSequence();
             playSeqCounter = 0; //reset the player sequence counter
             curr_state.state = "Play";
+            inputButton.setEnabled(false);
 
         }
 
@@ -319,8 +323,10 @@ public class simon_motion extends AppCompatActivity {
         if (curr_state.state.equals("Play")) {
             playSequence();
             curr_state.state = "Darken";
-            if (playSeqCounter == gameSequence.size())
+            if (playSeqCounter == gameSequence.size()) {
                 curr_state.state = "Guess";
+                inputButton.setEnabled(true);
+            }
         } else if ((curr_state.state.equals("Darken"))){
             darkSequence();
             curr_state.state = "Play";
