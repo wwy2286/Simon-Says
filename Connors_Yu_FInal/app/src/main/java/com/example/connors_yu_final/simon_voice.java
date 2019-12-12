@@ -38,10 +38,11 @@ public class simon_voice extends AppCompatActivity {
     private static Bitmap BlueUnlit, BlueLit;
     private static Bitmap YellowUnlit, YellowLit;
 
-    private static TextView Score;
+    private static TextView Score, HighScore;
 
     private static ArrayList<Integer> gameSequence;
     private static ArrayList<Integer> playerSequence;
+    private ImageView greenLit, redLit, blueLit, yellowLit;
 
     private static long mLastMove;
     private static long mMoveDelay;
@@ -59,6 +60,7 @@ public class simon_voice extends AppCompatActivity {
     private ArrayList<Integer> bb;
     private ImageView gameover;
     State curr_state = new State("");
+    private int currHighscore;
 
 
     @Override
@@ -74,10 +76,15 @@ public class simon_voice extends AppCompatActivity {
 
 
         sbut = findViewById(R.id.sbut);
+        HighScore = findViewById(R.id.scoreView);
         Score = (TextView) findViewById(R.id.scoreString);
         gameover = findViewById(R.id.gameover);
         Score = (TextView) findViewById(R.id.scoreString);
         restartButton = findViewById(R.id.restartButton);
+        greenLit = (ImageView) findViewById(R.id.greenButton);
+        redLit = (ImageView) findViewById(R.id.redButton);
+        yellowLit = (ImageView) findViewById(R.id.yellowButton);
+        blueLit = (ImageView) findViewById(R.id.blueButton);
         setBitMaps();
         sbut.setOnClickListener(new View.OnClickListener() {
 
@@ -164,6 +171,17 @@ public class simon_voice extends AppCompatActivity {
     }
 
     public void initGame(View v) {
+
+            greenLit.setImageBitmap(GreenUnlit);
+
+
+            redLit.setImageBitmap(RedUnlit);
+
+
+            yellowLit.setImageBitmap(YellowUnlit);
+
+        blueLit.setImageBitmap(BlueUnlit);
+        HighScore.setVisibility(View.INVISIBLE);
         gameover.setVisibility(View.INVISIBLE);
         sbut.setVisibility(View.VISIBLE);
         restartButton.setVisibility(View.INVISIBLE);
@@ -272,10 +290,33 @@ public class simon_voice extends AppCompatActivity {
         finish();
     }
 
+    public void restart(View view){
+        Score.setText("Score: 0");
+        HighScore.setVisibility(View.INVISIBLE);
+        greenLit.setImageBitmap(GreenUnlit);
+
+
+        redLit.setImageBitmap(RedUnlit);
+
+
+        yellowLit.setImageBitmap(YellowUnlit);
+
+        blueLit.setImageBitmap(BlueUnlit);
+        gameover.setVisibility(View.INVISIBLE);
+        sbut.setVisibility(View.VISIBLE);
+        restartButton.setVisibility(View.INVISIBLE);
+    }
+
     private void gameOver() {
         sbut.setVisibility(View.INVISIBLE);
         gameover.setVisibility(View.VISIBLE);
         restartButton.setVisibility(View.VISIBLE);
+
+        if (scoreCounter>currHighscore){
+            currHighscore = scoreCounter;
+        }
+        HighScore.setText("Highscore is " + currHighscore + "!");
+        HighScore.setVisibility(View.VISIBLE);
     }
 
     private void generateSequence() {

@@ -40,7 +40,7 @@ public class simon_motion extends AppCompatActivity {
     private ImageView gameover;
     Button inputButton, restartButton;
 
-    private static TextView Score;
+    private static TextView Score, HighScore;
 
     //the two arrays that will dictate the game
     private static ArrayList<Integer> gameSequence;
@@ -52,6 +52,8 @@ public class simon_motion extends AppCompatActivity {
     private static int colorTouched;
     private static boolean winOrLose;
     private static int scoreCounter;
+    private ImageView greenLit, redLit, blueLit, yellowLit;
+    private int currHighscore;
 
 
     private HashMap<String,Integer> colorToInt = new HashMap<>();
@@ -79,6 +81,12 @@ public class simon_motion extends AppCompatActivity {
         gameover = findViewById(R.id.gameover);
         Score = (TextView)findViewById(R.id.scoreString);
         restartButton = findViewById(R.id.restartButton);
+        restartButton = findViewById(R.id.restartButton);
+        greenLit = (ImageView) findViewById(R.id.greenButton);
+        redLit = (ImageView) findViewById(R.id.redButton);
+        yellowLit = (ImageView) findViewById(R.id.yellowButton);
+        blueLit = (ImageView) findViewById(R.id.blueButton);
+        HighScore = findViewById(R.id.scoreView);
         //gyroscope.unregister();
         //setGyroscopeListener();
         setBitMaps();
@@ -119,26 +127,42 @@ public class simon_motion extends AppCompatActivity {
                     getWindow().getDecorView().setBackgroundColor(Color.RED);
                     System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
                     bb.add(2);
+//                    if (compareSequence() == false){
+//                        curr_state.state = "Done";
+//                   }
 
                     accelerometer.unregister();
+
                 }
                 else if(tx>1.0f && ty<-1.0f){
                     getWindow().getDecorView().setBackgroundColor(Color.BLUE);
                     System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
+
                     bb.add(4);
+//                    if (compareSequence() == false){
+//                        curr_state.state = "Done";
+//                    }
                     accelerometer.unregister();
+
                 }
                 else if(tx<-1.0f && ty>1.0f){
                     getWindow().getDecorView().setBackgroundColor(Color.GREEN);
                     System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
                     bb.add(1);
-
+//                    if (compareSequence() == false){
+//                        curr_state.state = "Done";
+//                    }
                     accelerometer.unregister();
+
                 } else if(tx<-1.0f && ty<-1.0f){
                     getWindow().getDecorView().setBackgroundColor(Color.YELLOW);
                     System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
                     bb.add(3);
+//                    if (compareSequence() == false){
+//                        curr_state.state = "Done";
+//                    }
                     accelerometer.unregister();
+
                 }
 
             }
@@ -156,6 +180,7 @@ public class simon_motion extends AppCompatActivity {
                     getWindow().getDecorView().setBackgroundColor(Color.RED);
                     bb.add(2);
                     System.out.println("x = " + tx + " y = " + ty + " z = " + tz);
+
                     gyroscope.unregister();
                 }
                 else if(tx>2.0f && ty<-2.0f && (curr_state.state.equals(  "Guess"))){
@@ -196,6 +221,17 @@ public class simon_motion extends AppCompatActivity {
 
     public void initGame(View v)
     {
+
+        HighScore.setVisibility(View.INVISIBLE);
+        greenLit.setImageBitmap(GreenUnlit);
+
+
+        redLit.setImageBitmap(RedUnlit);
+
+
+        yellowLit.setImageBitmap(YellowUnlit);
+
+        blueLit.setImageBitmap(BlueUnlit);
         gameover.setVisibility(View.INVISIBLE);
         inputButton.setVisibility(View.VISIBLE);
         restartButton.setVisibility(View.INVISIBLE);
@@ -254,6 +290,11 @@ public class simon_motion extends AppCompatActivity {
                     scoreCounter++;
                     Score.setText("Score: " + Integer.toString(scoreCounter));
                 }
+            } else {
+                if(!compareSequence()){
+                    curr_state.state="Done";
+                    gameOver();
+                }
             }
 
         }
@@ -265,7 +306,22 @@ public class simon_motion extends AppCompatActivity {
             SimonButtonHandler.sleep(mMoveDelay);
     }
 
+    public void restart(View view){
+        Score.setText("Score: 0");
+        HighScore.setVisibility(View.INVISIBLE);
+        greenLit.setImageBitmap(GreenUnlit);
 
+
+        redLit.setImageBitmap(RedUnlit);
+
+
+        yellowLit.setImageBitmap(YellowUnlit);
+
+        blueLit.setImageBitmap(BlueUnlit);
+        gameover.setVisibility(View.INVISIBLE);
+        inputButton.setVisibility(View.VISIBLE);
+        restartButton.setVisibility(View.INVISIBLE);
+    }
 
     public void tap(View view)
     {
@@ -305,6 +361,9 @@ public class simon_motion extends AppCompatActivity {
             if (gameSeqPointer != playerSeqPointer)
                 return false;
         }
+//        if (gameSeqITR.hasNext() || playerSeqITR.hasNext()) {
+//            return false;
+//        }
         return true;
     }
 
@@ -324,6 +383,11 @@ public class simon_motion extends AppCompatActivity {
         inputButton.setVisibility(View.INVISIBLE);
         gameover.setVisibility(View.VISIBLE);
         restartButton.setVisibility(View.VISIBLE);
+        if (scoreCounter>currHighscore){
+            currHighscore = scoreCounter;
+        }
+        HighScore.setText("Highscore is " + currHighscore + "!");
+        HighScore.setVisibility(View.VISIBLE);
     }
 
     //Generates a new portion of the sequence and adds it onto the Array List.
