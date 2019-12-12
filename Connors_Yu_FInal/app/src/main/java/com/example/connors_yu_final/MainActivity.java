@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         voice_b = findViewById(R.id.voice_b);
         motion_b = findViewById(R.id.motion_b);
         welcome.setTextColor(Color.WHITE);
-        voice_b.setTextColor(Color.WHITE);
+      //  voice_b.setTextColor(Color.WHITE);
     }
 
     public void voiceClick(View view)
