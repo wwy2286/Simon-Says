@@ -114,8 +114,7 @@ public class simon_voice extends AppCompatActivity {
             }
         });
         dbHelper = new DatabaseOpenHelper(this);
-       //dbHelper.deleteDatabase();
-        db = dbHelper.getWritableDatabase();
+db = dbHelper.getWritableDatabase();
         Cursor c = readDB();
         c.moveToPosition(0);
         int id = c.getInt(0);
@@ -164,21 +163,17 @@ public class simon_voice extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Enter your initial");
 
-// Set up the input
         input = new EditText(this);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
 
         input.setFilters(new InputFilter[] { new InputFilter.LengthFilter(MAX_NUM), new InputFilter.AllCaps() });
         builder.setView(input);
 
-// Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                // Toast.makeText(this, "You have achieved a new high score!", Toast.LENGTH_LONG).show();
-                userInitial = input.getText().toString();
+userInitial = input.getText().toString();
                 if (userInitial.equals("")){
                     Toast.makeText(context, "Initial can not be empty", Toast.LENGTH_LONG).show();
                     askInitial();
@@ -246,8 +241,7 @@ public class simon_voice extends AppCompatActivity {
         winOrLose = compareSequence();
 
         if (!winOrLose) {
-           // CURRENT_STATE = DEAD_STATE;
-            curr_state.state = "Done";
+curr_state.state = "Done";
             gameOver();
         } else {
             curr_state.state = "Start";
@@ -283,7 +277,7 @@ public class simon_voice extends AppCompatActivity {
         getWindow().getDecorView().setBackgroundColor(Color.BLACK);
         if (curr_state.state.equals("Start")) {
             clearPlayerSequence();
-            generateSequence();
+            genSeq();
             playSeqCounter = 0;
 
             curr_state.state = "Play";
@@ -291,9 +285,8 @@ public class simon_voice extends AppCompatActivity {
         }
 
         if (curr_state.state.equals("Play")) {
-            playSequence();
-          //  CURRENT_STATE = DARK_SEQ;
-            curr_state.state = "Darken";
+            runSeq();
+curr_state.state = "Darken";
             if (playSeqCounter == gameSequence.size())
                 curr_state.state = "Guess";
         } else if (curr_state.state.equals("Darken")) {
@@ -302,7 +295,7 @@ public class simon_voice extends AppCompatActivity {
         }
 
         if (curr_state.state.equals("Guess")) {
-            darkenLastButton();
+            unLight();
 
         }
         if (curr_state.state.equals("Guess"))
@@ -394,18 +387,18 @@ public class simon_voice extends AppCompatActivity {
         HighScore.setVisibility(View.VISIBLE);
     }
 
-    private void generateSequence() {
+    private void genSeq() {
         Random RNG = new Random();
         gameSequence.add(RNG.nextInt(4) + 1);
 
     }
 
-    private void playSequence() {
+    private void runSeq() {
         long time = System.currentTimeMillis();
 
         if (time - mLastMove > mMoveDelay) {
             if (playSeqCounter < gameSequence.size()) {
-                lightButton(playSeqCounter);
+                button_light(playSeqCounter);
                 System.out.println(playSeqCounter);
                 playSeqCounter++;
             }
@@ -424,7 +417,7 @@ public class simon_voice extends AppCompatActivity {
         mLastMove = time;
     }
 
-    private void darkenLastButton() {
+    private void unLight() {
         long time = System.currentTimeMillis();
 
         if (time - mLastMove > mMoveDelay) {
@@ -432,7 +425,7 @@ public class simon_voice extends AppCompatActivity {
         }
     }
 
-    private void lightButton(int index) {
+    private void button_light(int index) {
         ImageView litImage;
 
         if (gameSequence.get(index).equals(GREEN)){
@@ -461,12 +454,10 @@ public class simon_voice extends AppCompatActivity {
     private void darkenButton(int index) {
         ImageView litImage;
 
-        //switch (gameSequence.get(index)) {
-
-        if (gameSequence.get(index).equals(GREEN)){
+if (gameSequence.get(index).equals(GREEN)){
             litImage = (ImageView) findViewById(R.id.greenButton);
             litImage.setImageBitmap(GreenUnlit);
-    }
+        }
         if (gameSequence.get(index).equals(RED)){
             litImage = (ImageView) findViewById(R.id.redButton);
             litImage.setImageBitmap(RedUnlit);
@@ -479,7 +470,7 @@ public class simon_voice extends AppCompatActivity {
             litImage = (ImageView) findViewById(R.id.yellowButton);
             litImage.setImageBitmap(YellowUnlit);
         }
-        }
+    }
 
 
     private void setBitMaps() {
